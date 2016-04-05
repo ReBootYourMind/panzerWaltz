@@ -3,6 +3,7 @@
  */
 package panzerWaltz;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,16 +13,17 @@ import java.util.List;
  */
 public class PWRedditFlairs {
 
-	private List<FlairImage> flairit;
+	private List<FlairImage> flairList;
 	private PWRedditFlairsGUI redditGUI;
 	
 	/**
 	 * konstruktori, jolla tehd‰‰ yhteys GUI:n kanssa
+	 * contructor that makes the connection to the GUI
 	 * @param gui gui that created this
 	 */
 	public PWRedditFlairs(PWRedditFlairsGUI gui) {
 		redditGUI = gui;
-		//TODO make the collection
+		flairList = new ArrayList<FlairImage>(400);
 	}
 	
 	
