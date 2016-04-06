@@ -177,6 +177,33 @@ public class FlairImage {
 	}
 	
 	/**
+	 * Gives a number from a name
+	 * @param name where to get the number
+	 * @param separator what separates the number from the rest
+	 * @return the number 
+	 */
+	public static int giveNumberFromName(String name, char separator){
+		String[] parts = name.split("" + separator);
+		
+		int lastSeparator = name.lastIndexOf(""+separator);
+		int fisrtSeparator = name.indexOf(""+separator);
+		if (lastSeparator < 0 && fisrtSeparator < 0){
+			return 0;
+		}
+		
+		int candidateStart = takeNumberFromString(parts[0]); 
+		if (candidateStart > 0) {
+			return candidateStart;
+		}
+		
+		int candidateEnd = takeNumberFromString(parts[parts.length-1]); 	
+		if (candidateEnd > 0) {
+			return candidateEnd;
+		}
+		return 0;
+	}
+	
+	/**
 	 * ottaa numeron merkkijonosta
 	 * takes a number from a string
 	 * @param string where to look for

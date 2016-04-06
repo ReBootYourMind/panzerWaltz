@@ -1,6 +1,5 @@
 package panzerWaltz;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -20,9 +19,17 @@ import java.awt.event.ActionEvent;
 
 public class PWRedditFlairsGUI extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtNamed;
 	private JTextField txtNameless;
+	private JLabel lblImagesFound;
+	private final String foundText = "images found";
+	private JLabel lblImagesNamed;
+	private final String namedText = "images named";
 	private PWRedditFlairs programLogic;
 
 	/**
@@ -76,12 +83,12 @@ public class PWRedditFlairsGUI extends JFrame {
 		});
 		btnName.setBackground(Color.RED);
 		
-		JLabel lblImagesFound = new JLabel("images found");
+		lblImagesFound = new JLabel(foundText);
 		
-		JLabel lblImagesNamed = new JLabel("images named");
+		lblImagesNamed = new JLabel(namedText);
 		
-		JButton btnUnohda = new JButton("Unohda");
-		btnUnohda.addActionListener(new ActionListener() {
+		JButton btnForget = new JButton("Forget");
+		btnForget.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				forget();
 			}
@@ -103,7 +110,7 @@ public class PWRedditFlairsGUI extends JFrame {
 								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnUnohda)
+										.addComponent(btnForget)
 										.addComponent(btnName)))))
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
 							.addComponent(lblImagesNamed, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -124,7 +131,7 @@ public class PWRedditFlairsGUI extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblImagesFound)
-						.addComponent(btnUnohda))
+						.addComponent(btnForget))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblImagesNamed)
 					.addContainerGap(148, Short.MAX_VALUE))
@@ -138,8 +145,15 @@ public class PWRedditFlairsGUI extends JFrame {
 	 */
 	private void find(){
 		int howMany = programLogic.findFiles(txtNamed.getText(), txtNameless.getText());
-		//TODO update the findings to the labels
-		doesntWork("update of the findings "+ howMany +"\n" + txtNamed.getText()+"\n"+ txtNameless.getText() );
+		if (howMany < 0) {
+			JOptionPane.showMessageDialog(this, "Something went wrong with the finding.");
+			return;
+		}
+		else if (howMany == 0) {
+			JOptionPane.showMessageDialog(this, "Didn't find anything from the locations given.");
+			return;
+		}
+		lblImagesFound.setText(howMany + " " + foundText);
 	}
 	
 	/**
@@ -149,10 +163,11 @@ public class PWRedditFlairsGUI extends JFrame {
 	private void forget() {
 		boolean didItWork = programLogic.forget();
 		if (!didItWork) {
-			//TODO if failed
-			//updte statistics to 0
-			doesntWork("forget " + didItWork);
+			JOptionPane.showMessageDialog(this, "Forgetting didn't work. Please restart the program.");
+			return;
 		}
+		lblImagesFound.setText("0 " + foundText);
+		lblImagesNamed.setText("0 " + namedText);
 	}
 	
 	/**
@@ -160,9 +175,14 @@ public class PWRedditFlairsGUI extends JFrame {
 	 * names the files, if it doesn't work shows a popup
 	 */
 	private void nameFiles() {
-		int howMany = programLogic.nameFiles();
-		if (howMany < 0) {
-			doesntWork("name " + howMany);
+		int answer =JOptionPane.showConfirmDialog(this, "Are you sure to rename the files in the lower box?");
+		if (answer == JOptionPane.YES_OPTION) {
+			int howMany = programLogic.nameFiles();
+			if (howMany < 0) {
+				doesntWork("Namimg returned: " + howMany + "\nSomething went wrong");
+				return;
+			}
+			lblImagesNamed.setText(howMany + " " + namedText);
 		}
 	}
 	/**

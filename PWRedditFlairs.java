@@ -15,6 +15,7 @@ public class PWRedditFlairs {
 
 	private List<FlairImage> flairList;
 	private PWRedditFlairsGUI redditGUI;
+	private final int INITCOUNT = 400;
 	
 	/**
 	 * konstruktori, jolla tehd‰‰ yhteys GUI:n kanssa
@@ -23,7 +24,7 @@ public class PWRedditFlairs {
 	 */
 	public PWRedditFlairs(PWRedditFlairsGUI gui) {
 		redditGUI = gui;
-		flairList = new ArrayList<FlairImage>(400);
+		flairList = new ArrayList<FlairImage>(INITCOUNT);
 	}
 	
 	
@@ -31,7 +32,7 @@ public class PWRedditFlairs {
 	 * Finds the desired files from the locations given
 	 * @param first named location
 	 * @param second nameless location
-	 * @return how many was found
+	 * @return how many was found -1 if something went wrong
 	 */
 	public int findFiles(String first, String second){
 		//TODO make finding
@@ -48,9 +49,9 @@ public class PWRedditFlairs {
 	 * @return did it work
 	 */
 	public boolean forget() {
-		//TODO make the forget
-		//make a new collection
-		return false;
+		flairList = new ArrayList<FlairImage>(INITCOUNT);
+		//RESET everything needed
+		return true;
 	}
 	
 	/**
