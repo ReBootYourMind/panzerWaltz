@@ -3,6 +3,8 @@
  */
 package panzerWaltz;
 
+import java.io.File;
+
 
 /**
  * 6.4.2016
@@ -35,15 +37,42 @@ public class PWRedditFlairs {
 	 * @return how many was found -1 if something went wrong
 	 */
 	public int findFiles(String first, String second){
+		int howMany = -1;
 		//TODO make finding
-		//search the folders and add them to the collection, recursion? since they can be inside folders
-		//look for the number in the file using  FlairImage.giveNumberFromName(String, char) first 
-		//make a new flairimage if there is nothing in the collection in it's spot 
-		//and then input it into the slot of the number
-		//if there was a image just add it into it with addFile(File)
-		//so that a file with 182 will have an index number of 182 in the collection.
+		File folder1 = new File(first);
+		File folder2 = new File(second);
+		char separator = '-';
+		if (folder1.isDirectory() && folder2.isDirectory()) {
+			//both exsist and are folders
+			howMany = 0;
+			File[] fileList = folder1.listFiles();
+			for (int i = 0; i < fileList.length; i++) {
+				if (fileList[i].isFile()) {
+					//look for the number in the file using  FlairImage.giveNumberFromName(String, char) 
+					int number = FlairImage.giveNumberFromName(fileList[i].getName(), separator);
+					if (number <= 0) {
+						break; //the number was negative or 0 meaning that the function didn't get anything good.
+					}
+					if (flairList[number] == null) {
+						//make a new flairimage if there is nothing in the collection in it's spot 
+						FlairImage newImage = new FlairImage();
+						newImage.addFile(fileList[i]);
+					}
+					//and then input it into the slot of the number
+					//if there was a image just add it into it with addFile(File)
+					//so that a file with 182 will have an index number of 182 in the collection.
+					
+					//addFlairImage(image);
+					howMany++;
+				}
+				else if (fileList[i].isDirectory()){
+					//recursion
+				}
+			}
+		}
+		
 		//while counting the number of files added.
-		return -1;
+		return howMany;
 	}
 	
 	/**
