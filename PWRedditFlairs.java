@@ -36,9 +36,13 @@ public class PWRedditFlairs {
 	 */
 	public int findFiles(String first, String second){
 		//TODO make finding
-		//search the folders and add them to the collection
-		//look for the number in the file first and then input it into the slot of the number
+		//search the folders and add them to the collection, recursion? since they can be inside folders
+		//look for the number in the file using  FlairImage.giveNumberFromName(String, char) first 
+		//make a new flairimage if there is nothing in the collection in it's spot 
+		//and then input it into the slot of the number
+		//if there was a image just add it into it with addFile(File)
 		//so that a file with 182 will have an index number of 182 in the collection.
+		//while counting the number of files added.
 		return -1;
 	}
 	
