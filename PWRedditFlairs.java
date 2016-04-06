@@ -3,8 +3,6 @@
  */
 package panzerWaltz;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 6.4.2016
@@ -13,7 +11,8 @@ import java.util.List;
  */
 public class PWRedditFlairs {
 
-	private List<FlairImage> flairList;
+	private FlairImage[] flairList;
+	private int maxFlairs;
 	private PWRedditFlairsGUI redditGUI;
 	private final int INITCOUNT = 400;
 	
@@ -24,7 +23,8 @@ public class PWRedditFlairs {
 	 */
 	public PWRedditFlairs(PWRedditFlairsGUI gui) {
 		redditGUI = gui;
-		flairList = new ArrayList<FlairImage>(INITCOUNT);
+		flairList = new FlairImage[INITCOUNT];
+		maxFlairs = INITCOUNT;
 	}
 	
 	
@@ -49,20 +49,48 @@ public class PWRedditFlairs {
 	 * @return did it work
 	 */
 	public boolean forget() {
-		flairList = new ArrayList<FlairImage>(INITCOUNT);
+		flairList = new FlairImage[INITCOUNT];
+		maxFlairs = INITCOUNT;
 		//RESET everything needed
 		return true;
 	}
 	
 	/**
+	 * adds a flair to the collection and if there is no room for it makes room for it
+	 * @param flair image what to add
+	 */
+	private void addFlairImage(FlairImage image){
+		if (image.getNumber() >= maxFlairs) {
+			//no room for the flair, make more room
+			int newMax = (maxFlairs + 1 ) * 2;
+			FlairImage[] flairListTemp = new FlairImage[newMax];
+			for (int i = 0; i < flairList.length; i++) {
+				flairListTemp[i] = flairList[i];
+			}
+			flairList = flairListTemp;
+			maxFlairs = newMax;
+		}
+		if (flairList[image.getNumber()] == null) {
+			// there is no flair with that number yet
+			flairList[image.getNumber()] = image;
+		}
+		
+	}
+	
+	/**
 	 * nimeää kuvat
-	 * names the images
-	 * @return how many was found
+	 * names the images in collection
+	 * @return how many was named
 	 */
 	public int nameFiles() {
-		//TODO make the naming
-		//for loop that goes trought the collection and if it has both files named the other
-		return -1;
+		int numberOfNamed = 0;
+		for (int i = 0; i < flairList.length; i++) {
+			if (flairList[i] != null) {
+				if (flairList[i].nameSecondWithFirst())
+					numberOfNamed++;
+			}
+		}
+		return numberOfNamed;
 	}
 
 }
