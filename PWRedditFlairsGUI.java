@@ -16,6 +16,13 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Dimension;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class PWRedditFlairsGUI extends JFrame {
 
@@ -54,13 +61,22 @@ public class PWRedditFlairsGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public PWRedditFlairsGUI() {
+		setMinimumSize(new Dimension(550, 300));
 		programLogic = new PWRedditFlairs(this);
 		setTitle("PW Reddit Flairs");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 513, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		
+		JPanel panel = new JPanel();
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setMinimumSize(new Dimension(100, 10));
+		panel_1.setMaximumSize(new Dimension(100, 32767));
+		panel_1.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		txtNamed = new JTextField();
 		txtNamed.setText(namedTxt);
@@ -70,7 +86,56 @@ public class PWRedditFlairsGUI extends JFrame {
 		txtNameless.setText(namelessTxt);
 		txtNameless.setColumns(10);
 		
+		lblImagesFound = new JLabel(foundText);
+		
+		lblImagesNamed = new JLabel(namedText);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(txtNamed, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+						.addComponent(txtNameless, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+						.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(lblImagesNamed, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblImagesFound, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(txtNamed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(11)
+					.addComponent(txtNameless, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblImagesFound)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblImagesNamed)
+					.addContainerGap(149, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
+		contentPane.add(panel, BorderLayout.WEST);
+		contentPane.add(panel_1);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setMaximumSize(new Dimension(100, 32767));
+		panel_1.add(panel_2, BorderLayout.NORTH);
+		GridBagLayout gbl_panel_2 = new GridBagLayout();
+		gbl_panel_2.columnWidths = new int[]{53, 59, 0};
+		gbl_panel_2.rowHeights = new int[]{23, 23, 0, 0};
+		gbl_panel_2.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_2.setLayout(gbl_panel_2);
+		
 		JButton btnFind = new JButton("Find");
+		GridBagConstraints gbc_btnFind = new GridBagConstraints();
+		gbc_btnFind.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnFind.insets = new Insets(0, 0, 5, 5);
+		gbc_btnFind.gridx = 0;
+		gbc_btnFind.gridy = 0;
+		panel_2.add(btnFind, gbc_btnFind);
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				find();
@@ -78,6 +143,12 @@ public class PWRedditFlairsGUI extends JFrame {
 		});
 		
 		JButton btnName = new JButton("Name");
+		GridBagConstraints gbc_btnName = new GridBagConstraints();
+		gbc_btnName.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnName.insets = new Insets(0, 0, 5, 0);
+		gbc_btnName.gridx = 0;
+		gbc_btnName.gridy = 1;
+		panel_2.add(btnName, gbc_btnName);
 		btnName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				nameFiles();
@@ -85,60 +156,19 @@ public class PWRedditFlairsGUI extends JFrame {
 		});
 		btnName.setBackground(Color.RED);
 		
-		lblImagesFound = new JLabel(foundText);
-		
-		lblImagesNamed = new JLabel(namedText);
-		
 		JButton btnForget = new JButton("Forget");
+		GridBagConstraints gbc_btnForget = new GridBagConstraints();
+		gbc_btnForget.anchor = GridBagConstraints.NORTH;
+		gbc_btnForget.gridx = 0;
+		gbc_btnForget.gridy = 2;
+		panel_2.add(btnForget, gbc_btnForget);
+		panel_1.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnFind, btnName, btnForget}));
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{panel, txtNamed, txtNameless, btnFind, btnName, btnForget}));
 		btnForget.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				forget();
 			}
 		});
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(txtNameless, Alignment.TRAILING)
-								.addComponent(txtNamed, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnFind))
-								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnForget)
-										.addComponent(btnName)))))
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(lblImagesNamed, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblImagesFound, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)))
-					.addContainerGap(79, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtNamed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnFind))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtNameless, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnName))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblImagesFound)
-						.addComponent(btnForget))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblImagesNamed)
-					.addContainerGap(148, Short.MAX_VALUE))
-		);
-		contentPane.setLayout(gl_contentPane);
 	}
 	
 	/**
