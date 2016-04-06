@@ -25,7 +25,9 @@ public class PWRedditFlairsGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtNamed;
+	private final String namedTxt = "C:\\Users\\ReBootYourMind\\workspace\\omat javajutut\\src\\panzerWaltz\\named";
 	private JTextField txtNameless;
+	private final String namelessTxt = "C:\\Users\\ReBootYourMind\\workspace\\omat javajutut\\src\\panzerWaltz\\nameless";
 	private JLabel lblImagesFound;
 	private final String foundText = "images found";
 	private JLabel lblImagesNamed;
@@ -61,11 +63,11 @@ public class PWRedditFlairsGUI extends JFrame {
 		setContentPane(contentPane);
 		
 		txtNamed = new JTextField();
-		txtNamed.setText("Named");
+		txtNamed.setText(namedTxt);
 		txtNamed.setColumns(10);
 		
 		txtNameless = new JTextField();
-		txtNameless.setText("Nameless");
+		txtNameless.setText(namelessTxt);
 		txtNameless.setColumns(10);
 		
 		JButton btnFind = new JButton("Find");
@@ -190,7 +192,7 @@ public class PWRedditFlairsGUI extends JFrame {
 	 * shows a popup
 	 * @param what message that will be displayed
 	 */
-	private void doesntWork (String what) {
+	protected void doesntWork (String what) {
 		JOptionPane.showMessageDialog(this, what);
 	}
 }

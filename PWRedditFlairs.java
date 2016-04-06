@@ -41,37 +41,55 @@ public class PWRedditFlairs {
 		//TODO make finding
 		File folder1 = new File(first);
 		File folder2 = new File(second);
+		//redditGUI.doesntWork("findfiles\n" + folder1.getName() + "\n" + folder1.getPath()+ "\n" + folder1.isDirectory() + "\n"+ folder2.getName() + "\n" + folder2.getPath()+ "\n" + folder2.isDirectory());
 		char separator = '-';
 		if (folder1.isDirectory() && folder2.isDirectory()) {
 			//both exsist and are folders
 			howMany = 0;
-			File[] fileList = folder1.listFiles();
-			for (int i = 0; i < fileList.length; i++) {
-				if (fileList[i].isFile()) {
-					//look for the number in the file using  FlairImage.giveNumberFromName(String, char) 
-					int number = FlairImage.giveNumberFromName(fileList[i].getName(), separator);
-					if (number <= 0) {
-						break; //the number was negative or 0 meaning that the function didn't get anything good.
-					}
-					if (flairList[number] == null) {
-						//make a new flairimage if there is nothing in the collection in it's spot 
-						FlairImage newImage = new FlairImage();
-						newImage.addFile(fileList[i]);
-					}
-					//and then input it into the slot of the number
-					//if there was a image just add it into it with addFile(File)
-					//so that a file with 182 will have an index number of 182 in the collection.
-					
-					//addFlairImage(image);
-					howMany++;
-				}
-				else if (fileList[i].isDirectory()){
-					//recursion
-				}
-			}
+			howMany = howMany + findAFolder(folder2, separator);
+			howMany = howMany + findAFolder(folder1, separator);
 		}
 		
 		//while counting the number of files added.
+		return howMany;
+	}
+	
+	/**
+	 * adds a folder in the collection
+	 * @param folder where to look for images
+	 * @param separator what separates the number from the rest
+	 * @return how many images were added
+	 */
+	private int findAFolder(File folder,char separator){
+		int howMany = 0;
+		File[] fileList = folder.listFiles();
+		for (int i = 0; i < fileList.length; i++) {
+			if (fileList[i].isFile()) {
+				//look for the number in the file using  FlairImage.giveNumberFromName(String, char) 
+				int number = FlairImage.giveNumberFromName(FlairImage.takeExtensionAway(fileList[i].getName()), separator);
+				if (number <= 0) {
+					break; //the number was negative or 0 meaning that the function didn't get anything good.
+				}
+				if (flairList[number] == null) {
+					//make a new flairimage if there is nothing in the collection in it's spot 
+					FlairImage newImage = new FlairImage();
+					if (newImage.addFile(fileList[i])) {
+						addFlairImage(newImage);
+						howMany++;
+					}
+					//and then input it into the slot of the number
+				}
+				else {
+					//if there was a image just add it into it with addFile(File)
+					if (flairList[number].addFile(fileList[i])) {
+						howMany++;
+					}
+				}
+			}
+			else if (fileList[i].isDirectory()){
+				howMany = howMany + findAFolder(fileList[i], separator); //recursion
+			}
+		}
 		return howMany;
 	}
 	

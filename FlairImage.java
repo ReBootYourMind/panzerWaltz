@@ -55,7 +55,7 @@ public class FlairImage {
 		String secondPath = shorten(second.getPath(), second.getName().length());
 		File newLocation = new File(secondPath + first.getName());
 		
-		return first.renameTo(newLocation);
+		return second.renameTo(newLocation);
 	}
 	
 	/**
@@ -69,6 +69,11 @@ public class FlairImage {
 	public boolean addFile(File file){
 		if (secondFile && firstFile)
 			return false;
+		if (!firstFile){
+            if(addFirst(file)) {
+            	return true;
+            }
+		}
 		if (!secondFile) {
 			String withoutExtension = takeExtensionAway(file.getName());
 			
@@ -87,27 +92,34 @@ public class FlairImage {
 			number = candidate;
 			return true;
 		}
-		if (!firstFile){
-            String withoutExtension = takeExtensionAway(file.getName());
-			
-			char separator ='-';
-			StringBuilder withoutExtensionSB = new StringBuilder(withoutExtension);
-			AtomicBoolean wasItAtFront = new AtomicBoolean(false);
-			int candidate = separateNumber(withoutExtensionSB, separator, wasItAtFront);
-			if (candidate <= 0)
-				return false;
-				
-			if (wasItAtFront.get()) {
-				name = withoutExtensionSB.toString();
-				fileList[0] = file;
-				firstFile = true;
-			}
-			else return false;
-			number = candidate;
-			return true;
-		}
 		return false;
 	}
+	
+	/**
+	 * tries to add the first file
+	 * @param file what to add
+	 * @return did it succeed
+	 */
+	private boolean addFirst(File file){
+		String withoutExtension = takeExtensionAway(file.getName());
+		
+		char separator ='-';
+		StringBuilder withoutExtensionSB = new StringBuilder(withoutExtension);
+		AtomicBoolean wasItAtFront = new AtomicBoolean(false);
+		int candidate = separateNumber(withoutExtensionSB, separator, wasItAtFront);
+		if (candidate <= 0)
+			return false;
+			
+		if (wasItAtFront.get()) {
+			name = withoutExtensionSB.toString();
+			fileList[0] = file;
+			firstFile = true;
+		}
+		else return false;
+		number = candidate;
+		return true;
+	}
+	
 	/**
 	 * erottaa jonosta numeron ja jos se oli edessä lyhentää sen pois siitä jonosta. Numero oletetaan joku eteen tai loppuun.
 	 * Takes a number from the string. If the number from at the start take it from the string. The number must be at the beginning or end.
