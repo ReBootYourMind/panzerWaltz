@@ -3,7 +3,14 @@
  */
 package panzerWaltz;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 
 
 /**
@@ -104,6 +111,26 @@ public class PWRedditFlairs {
 		maxFlairs = INITCOUNT;
 		//RESET everything needed
 		return true;
+	}
+	/**
+	 * outputs a list of flairs into the location given
+	 * @param where the location where to output the file
+	 * @return did it succeed
+	 */
+	protected boolean outputList(String where){
+		//File file = new File(where + "flairOutput.txt");
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(where + "flairOutput.txt"), "utf-8"))) {
+			writer.write("number|name\n");
+			for (FlairImage flairImage : flairList) {
+				if (flairImage != null) {
+					writer.write(flairImage.toString() + "\n");
+				}
+			}
+			return true;
+		} catch (IOException e) {
+		//nothing
+		}
+		return false;
 	}
 	
 	/**

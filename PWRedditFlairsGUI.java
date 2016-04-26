@@ -162,6 +162,14 @@ public class PWRedditFlairsGUI extends JFrame {
 		gbc_btnForget.gridx = 0;
 		gbc_btnForget.gridy = 2;
 		panel_2.add(btnForget, gbc_btnForget);
+		
+		JButton btnOutputlist = new JButton("outputList");
+		btnOutputlist.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				outputList();
+			}
+		});
+		panel_1.add(btnOutputlist, BorderLayout.WEST);
 		panel_1.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnFind, btnName, btnForget}));
 		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{panel, txtNamed, txtNameless, btnFind, btnName, btnForget}));
 		btnForget.addActionListener(new ActionListener() {
@@ -200,6 +208,15 @@ public class PWRedditFlairsGUI extends JFrame {
 		}
 		lblImagesFound.setText("0 " + foundText);
 		lblImagesNamed.setText("0 " + namedText);
+	}
+	/**
+	 * outputs a list of the flairs into a file
+	 */
+	private void outputList(){
+		String where = txtNamed.getText();
+		if (!programLogic.outputList(where)){
+			JOptionPane.showMessageDialog(this, "There was something wrong with the output");
+		}
 	}
 	
 	/**

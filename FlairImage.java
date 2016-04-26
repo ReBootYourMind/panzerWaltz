@@ -32,7 +32,7 @@ public class FlairImage {
 	 * @example
 	 * <pre name="test">
 	 * FlairImage testi = new FlairImage();
-	 * testi.toString() === " 0";
+	 * testi.toString() === "0|";
 	 * testi.getNumber() === 0;
 	 * testi.getName() === "";
 	 * </pre>
@@ -241,6 +241,7 @@ public class FlairImage {
 	/**
 	 * Will shorten the string with the desired amount
 	 * @param string what will be shortened
+	 * @param lenght how much
 	 * @return the shorter string
 	 * @example
 	 * <pre name="test">
@@ -305,7 +306,7 @@ public class FlairImage {
 	 * Gives the values as a String
 	 */
 	public String toString() {
-		return name + " " + number;
+		return number + "|" + name;
 	}
 	
 	/**
